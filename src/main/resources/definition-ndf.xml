@@ -1,0 +1,38 @@
+<definition>
+	<!-- the root record -->
+	<record path="record[@name='record']">
+		<reference>array[@name='rec_fields']</reference>
+	</record>
+	
+	<record path="record[@name='svc_sig']">
+		<field>value[@name='svc_in_validator_options']</field>
+		<field>value[@name='svc_out_validator_options']</field>
+		<field>value[@name='auditoption']</field>
+		<field>value[@name='caching']</field>
+		<field>value[@name='cache_ttl']</field>
+		<field>value[@name='stateless']</field>
+		<field>value[@name='node_comment']</field>
+		<field>value[@name='prefetch']</field>
+	</record>
+	<record path="/record[@name='sig_in']">
+		<reference>array[@name='rec_fields']</reference>
+	</record>
+	<record path="record[@name='svc_sig']/record[@name='sig_out']">
+		<reference>array[@name='rec_fields']</reference>
+	</record>
+	
+	<record path="array[@name='rec_fields']">
+		<reference>record[not(@name)]</reference>
+	</record>
+
+	<record path="record[not(@name)]">
+		<key>value[@name='field_name']</key>
+		<field>value[@name='node_comment']</field>
+		<field>value[@name='field_type']</field>
+		<field>value[@name='field_dim']</field>
+		<field>value[@name='node_type']</field>
+		<field>value[@name='nillable']</field>
+		<field>value[@name='field_opt']</field>
+		<reference>array[@name='rec_fields']</reference>
+	</record>	
+</definition>

@@ -1,0 +1,25 @@
+<definition>
+	<record path="providers">
+		<key>service</key>
+		<field>name</field>
+		<reference path="properties">property</reference>
+	</record>
+	<record path="applications">
+		<key>name</key>
+		<reference path="properties">property</reference>
+		<record path="subscriptions">
+			<key>provider</key>	
+			<key>type</key>
+			<field>continue</field>
+			<field>description</field>
+			<field>log</field>
+			<field>status</field>
+			<reference path="queries">property</reference>
+			<reference path="properties">property</reference>
+		</record>
+	</record>
+	<record path="property">
+		<key>key</key>
+		<field>value</field>
+	</record>
+</definition>

@@ -1,0 +1,89 @@
+<definition>
+
+	<record path="SEQUENCE">
+		<key>COMMENT</key>
+		<key>@NAME</key>
+		<key>@EXIT-ON</key>
+		<reference path="MAP[@MODE='STANDALONE']">MAP</reference>
+		<reference path="BRANCH">BRANCH</reference>
+		<reference path="INVOKE">INVOKE</reference>
+		<reference path="SEQUENCE">SEQUENCE</reference>
+		<reference path="LOOP">LOOP</reference>
+		<reference path="EXIT">EXIT</reference>
+	</record>
+	
+	<record path="BRANCH">
+		<key>COMMENT</key>
+		<key>@NAME</key>
+		<key>@LABELEXPRESSIONS</key>
+		<key>@SWITCH</key>
+		<reference path="MAP[@MODE='STANDALONE']">MAP</reference>
+		<reference path="BRANCH">BRANCH</reference>
+		<reference path="INVOKE">INVOKE</reference>
+		<reference path="SEQUENCE">SEQUENCE</reference>
+		<reference path="LOOP">LOOP</reference>
+		<reference path="EXIT">EXIT</reference>
+	</record>
+	
+	<record path="LOOP">
+		<key>@NAME</key>
+		<key>@IN-ARRAY</key>
+		<key>@OUT-ARRAY</key>
+		<field>COMMENT</field>
+		<reference path="MAP[@MODE='STANDALONE']">MAP</reference>
+		<reference path="BRANCH">BRANCH</reference>
+		<reference path="INVOKE">INVOKE</reference>
+		<reference path="SEQUENCE">SEQUENCE</reference>
+		<reference path="LOOP">LOOP</reference>
+	</record>
+
+	<record path="INVOKE">
+		<key>@NAME</key>
+		<key>@SERVICE</key>
+		<field>COMMENT</field>
+		<reference path="MAP[@MODE='INPUT']">MAP</reference>
+		<reference path="MAP[@MODE='OUTPUT']">MAP</reference>
+	</record>	
+
+	<record path="MAP">
+		<key>COMMENT</key>
+		<key>@NAME</key>
+		<record path="MAPINVOKE">
+			<key>@SERVICE</key>
+			<record path="MAP[@MODE='INVOKEINPUT']">
+				<record path="MAPCOPY">
+					<key>@FROM</key>
+					<key>@TO</key>
+				</record>
+				<record path="MAPDELETE">
+					<key>@FIELD</key>
+				</record>
+			</record>
+			<record path="MAP[@MODE='INVOKEOUTPUT']">
+				<record path="MAPCOPY">
+					<key>@FROM</key>
+					<key>@TO</key>
+				</record>
+				<record path="MAPDELETE">
+					<key>@FIELD</key>
+				</record>
+			</record>
+		</record>
+		<record path="MAPCOPY">
+			<key>@FROM</key>
+			<key>@TO</key>
+		</record>
+		<record path="MAPDELETE">
+			<key>@FIELD</key>
+		</record>
+	</record>
+	
+	<record path="EXIT">
+		<key>@NAME</key>
+		<key>@FROM</key>
+		<key>@SIGNAL</key>
+		<field>@FAILURE-MESSAGE</field>
+		<field>COMMENT</field>
+	</record>
+
+</definition>

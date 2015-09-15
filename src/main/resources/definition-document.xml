@@ -1,0 +1,20 @@
+<definition>
+	<!-- the root record -->
+	<record path="record[@name='record']">
+		<reference>array[@name='rec_fields']</reference>
+	</record>
+	
+	<record path="array[@name='rec_fields']">
+		<reference>record[not(@name)]</reference>
+	</record>
+
+	<record path="record[not(@name)]">
+		<key>value[@name='field_name']</key>
+		<field>value[@name='field_type']</field>
+		<field>value[@name='field_dim']</field>
+		<field>value[@name='node_type']</field>
+		<field>value[@name='nillable']</field>
+		<field>value[@name='field_opt']</field>
+		<reference>array[@name='rec_fields']</reference>
+	</record>	
+</definition>

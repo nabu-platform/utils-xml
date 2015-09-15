@@ -1,0 +1,9 @@
+<definition>
+	<record path="*">
+		<key>.</key>
+		<record path="@*">
+			<key>.</key>
+		</record>
+		<reference>*</reference>
+	</record>
+</definition>

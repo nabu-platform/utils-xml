@@ -1,0 +1,31 @@
+<definition>
+
+	<record path="//group">
+		<key>rootTable</key>
+		<reference>clauses</reference>
+		<reference>mappings</reference>
+		<reference>virtualTables</reference>
+		<reference>variables</reference>
+	</record>
+
+	<record path="clauses">
+		<key>text()</key>
+	</record>
+	
+	<record path="mappings">
+		<key>to</key>
+		<field>from</field>
+		<reference>clauses</reference>
+	</record>
+	
+	<record path="virtualTables">
+		<key>name</key>
+		<field>query</field>
+	</record>
+	
+	<record path="variables">
+		<key>name</key>
+		<field>value</field>
+	</record>
+	
+</definition>

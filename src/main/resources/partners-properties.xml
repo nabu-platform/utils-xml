@@ -1,0 +1,13 @@
+<definition>
+	<record path="properties">
+		<key>id</key>
+		<field>name</field>
+		<field>optional</field>
+		<field>fixed</field>
+		<field>identifier</field>
+		<record path="enumerations">
+			<key>id</key>
+			<field>value</field>
+		</record>
+	</record>
+</definition>
