@@ -1,6 +1,8 @@
 package be.nabu.utils.xml.diff;
 
 import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.transform.TransformerException;
@@ -346,5 +348,36 @@ public class XMLDiff {
 				return matchingChange;
 		}
 		return null;
+	}
+	
+	public void filter(String...blacklistPaths) {
+		if (changes != null) {
+			List<String> paths = Arrays.asList(blacklistPaths);
+			filter(changes, paths);
+		}
+	}
+
+	private void filter(List<Change> changes, List<String> paths) {
+		Iterator<Change> iterator = changes.iterator();
+		while (iterator.hasNext()) {
+			Change change = iterator.next();
+			if (change.getSource() != null && shouldFilter(change.getSource(), paths)) {
+				iterator.remove();
+			}
+			else if (change.getTarget() != null && shouldFilter(change.getTarget(), paths)) {
+				iterator.remove();
+			}
+			if (change.getChildren() != null) {
+				filter(change.getChildren(), paths);
+			}
+		}
+	}
+	
+	private boolean shouldFilter(Node node, List<String> paths) {
+		String path = node instanceof Attr
+			? getPathToRoot((Attr) node)
+			: getPathToRoot((Element) node);
+		String normalizedPath = path.replaceAll("\\[[^\\]]+\\]", "");
+		return paths.contains(path) || paths.contains(normalizedPath);
 	}
 }
