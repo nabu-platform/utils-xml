@@ -192,7 +192,7 @@ public class XMLDiff {
 								if (comparison != null)
 									writer.write("a:" + getPathToRoot((Element) comparison.getTarget().getParentNode()) + "\n");	
 								else
-									throw new RuntimeException("Could not find match that can situate the new element in the target document");
+									throw new RuntimeException("Could not find match that can situate the new element in the target document for: " + (change.getSource() instanceof Attr ? getPathToRoot((Attr) change.getSource()) : getPathToRoot((Element) change.getSource())));
 							}
 						}
 						try {
@@ -378,6 +378,8 @@ public class XMLDiff {
 			? getPathToRoot((Attr) node)
 			: getPathToRoot((Element) node);
 		String normalizedPath = path.replaceAll("\\[[^\\]]+\\]", "");
-		return paths.contains(path) || paths.contains(normalizedPath);
+		String pathNoPrefix = path.replaceAll("[a-zA-Z0-9]+:", "");
+		String normalizedPathNoPrefix = normalizedPath.replaceAll("[a-zA-Z0-9]+:", "");
+		return paths.contains(path) || paths.contains(normalizedPath) || paths.contains(pathNoPrefix) || paths.contains(normalizedPathNoPrefix);
 	}
 }
