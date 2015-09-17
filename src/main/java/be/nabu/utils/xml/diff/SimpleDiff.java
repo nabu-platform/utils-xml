@@ -48,8 +48,15 @@ public class SimpleDiff implements XMLDiffAlgorithm {
 				// same namespace
 				boolean sameNamespace = (sourceElement.getNamespaceURI() == null && targetElement.getNamespaceURI() == null) 
 					|| (sourceElement.getNamespaceURI() != null && sourceElement.getNamespaceURI().equals(targetElement.getNamespaceURI()));
-				boolean sameName = 	(sourceElement.getNodeName() == null && targetElement.getNodeName() == null) 
-					|| (sourceElement.getNodeName() != null && sourceElement.getNodeName().equals(targetElement.getNodeName()));
+				boolean sameName;
+				if (sourceElement.getLocalName() == null || targetElement.getLocalName() == null) {
+					sameName = (sourceElement.getNodeName() == null && targetElement.getNodeName() == null) 
+						|| (sourceElement.getNodeName() != null && sourceElement.getNodeName().equals(targetElement.getNodeName()));
+				}
+				else {
+					sameName = (sourceElement.getLocalName() == null && targetElement.getLocalName() == null) 
+						|| (sourceElement.getLocalName() != null && sourceElement.getLocalName().equals(targetElement.getLocalName()));
+				}
 				// it's the same element
 				if (sameNamespace && sameName) {
 					Change change = new Change(sourceElement, targetElement);
