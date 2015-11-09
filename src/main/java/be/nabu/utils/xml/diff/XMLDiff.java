@@ -219,7 +219,7 @@ public class XMLDiff {
 				case UPDATE:
 					writer.write("u:" + (change.getTarget() instanceof Attr ? getPathToRoot((Attr) change.getTarget()) : getPathToRoot((Element) change.getTarget())) + "\n");
 					// it is a text node
-					if (change.getTarget().getAttributes().getLength() == 0 && change.getTarget().getChildNodes().getLength() == 1 && change.getTarget().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE)
+					if (change.getTarget() instanceof Attr || (change.getTarget().getAttributes().getLength() == 0 && change.getTarget().getChildNodes().getLength() == 1 && change.getTarget().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE))
 						writer.write("< " + change.getTarget().getTextContent().replaceAll("\n", "\n< ") + "\n");
 					else {
 						try {
@@ -229,7 +229,7 @@ public class XMLDiff {
 							throw new RuntimeException(e);
 						}
 					}
-					if (change.getSource().getAttributes().getLength() == 0 && change.getSource().getChildNodes().getLength() == 1 && change.getSource().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE)
+					if (change.getTarget() instanceof Attr || (change.getSource().getAttributes().getLength() == 0 && change.getSource().getChildNodes().getLength() == 1 && change.getSource().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE))
 						writer.write("> " + change.getSource().getTextContent().replaceAll("\n", "\n< ") + "\n");
 					else {
 						try {
