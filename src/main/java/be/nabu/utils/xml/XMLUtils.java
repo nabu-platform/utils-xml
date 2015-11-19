@@ -236,10 +236,15 @@ public class XMLUtils {
 					}
 				}
 				else {
-					if (isContainer(child)) {
-						Map childMap = toMap(child);
-						childMap.put("$value", child.getTextContent());
-						map.put(name, childMap);
+					if (isText(child)) {
+						if (isContainer(child)) {
+							Map childMap = toMap(child);
+							childMap.put("$value", child.getTextContent());
+							map.put(name, childMap);
+						}
+						else {
+							map.put(name, child.getTextContent());
+						}
 					}
 					else {
 						map.put(name, toMap(child));
