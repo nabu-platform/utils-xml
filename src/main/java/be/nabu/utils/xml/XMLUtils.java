@@ -67,6 +67,9 @@ public class XMLUtils {
 		// no DTD
 		factory.setValidating(false);
 		factory.setNamespaceAware(namespaceAware);
+		factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+		// allow no external access, as defined http://docs.oracle.com/javase/7/docs/api/javax/xml/XMLConstants.html#FEATURE_SECURE_PROCESSING an empty string means no protocols are allowed
+		factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 		return factory.newDocumentBuilder().parse(xml);
 	}
 	
@@ -80,6 +83,8 @@ public class XMLUtils {
 		factory.setValidating(false);
 		factory.setNamespaceAware(namespaceAware);
 		try {
+			factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 			return factory.newDocumentBuilder().newDocument();
 		}
 		catch (ParserConfigurationException e) {
