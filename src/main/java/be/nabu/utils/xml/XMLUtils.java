@@ -28,6 +28,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -208,12 +209,12 @@ public class XMLUtils {
 		return transformer;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map<String, ?> toMap(Element element) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		NamedNodeMap attributes = element.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
-			map.put(attributes.item(i).getNodeName(), attributes.item(i).getTextContent());
+			map.put("@" + ((Attr) attributes.item(i)).getName(), attributes.item(i).getTextContent());
 		}
 		for (int i = 0; i < element.getChildNodes().getLength(); i++) {
 			if (element.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -226,7 +227,14 @@ public class XMLUtils {
 						map.put(name, objects);
 					}
 					if (isText(child)) {
-						((List<Object>) map.get(name)).add(child.getTextContent());
+						if (isContainer(child)) {
+							Map childMap = toMap(child);
+							childMap.put("$value", child.getTextContent());
+							((List<Object>) map.get(name)).add(childMap);
+						}
+						else {
+							((List<Object>) map.get(name)).add(child.getTextContent());
+						}
 					}
 					else {
 						((List<Object>) map.get(name)).add(toMap(child));
@@ -234,7 +242,14 @@ public class XMLUtils {
 				}
 				else {
 					if (isText(child)) {
-						map.put(name, child.getTextContent());
+						if (isContainer(child)) {
+							Map childMap = toMap(child);
+							childMap.put("$value", child.getTextContent());
+							map.put(name, childMap);
+						}
+						else {
+							map.put(name, child.getTextContent());
+						}
 					}
 					else {
 						map.put(name, toMap(child));
@@ -243,6 +258,10 @@ public class XMLUtils {
 			}
 		}
 		return map;
+	}
+
+	private static boolean isContainer(Element element) {
+		return !isText(element) || element.getAttributes().getLength() > 0;
 	}
 	
 	private static boolean isText(Element element) {
