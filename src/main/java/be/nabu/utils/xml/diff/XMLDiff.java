@@ -205,7 +205,7 @@ public class XMLDiff {
 				break;
 				case DELETE:
 					writer.write("d:" + (change.getTarget() instanceof Attr ? getPathToRoot((Attr) change.getTarget()) : getPathToRoot((Element) change.getTarget())) + "\n");
-					if (change.getTarget().getAttributes().getLength() == 0 && change.getTarget().getChildNodes().getLength() == 1 && change.getTarget().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE)
+					if (change.getTarget() instanceof Attr || (change.getTarget().getAttributes().getLength() == 0 && change.getTarget().getChildNodes().getLength() == 1 && change.getTarget().getChildNodes().item(0).getNodeType() == Node.TEXT_NODE))
 						writer.write("< " + change.getTarget().getTextContent().replaceAll("\n", "\n< ") + "\n");
 					else {
 						try {
