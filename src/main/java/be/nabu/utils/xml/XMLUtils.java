@@ -214,6 +214,9 @@ public class XMLUtils {
 		Map<String, Object> map = new HashMap<String, Object>();
 		NamedNodeMap attributes = element.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
+			if (((Attr) attributes.item(i)).getName().startsWith("xmlns:")) {
+				continue;
+			}
 			map.put("@" + ((Attr) attributes.item(i)).getName(), attributes.item(i).getTextContent());
 		}
 		for (int i = 0; i < element.getChildNodes().getLength(); i++) {
