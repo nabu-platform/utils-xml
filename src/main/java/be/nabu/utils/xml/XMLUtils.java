@@ -214,7 +214,8 @@ public class XMLUtils {
 		Map<String, Object> map = new HashMap<String, Object>();
 		NamedNodeMap attributes = element.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
-			if (((Attr) attributes.item(i)).getName().startsWith("xmlns:")) {
+			// we handle xsi:nil in a dedicated fashion
+			if (((Attr) attributes.item(i)).getName().startsWith("xmlns:") || ((Attr) attributes.item(i)).getName().equals("xsi:nil")) {
 				continue;
 			}
 			map.put("@" + ((Attr) attributes.item(i)).getName(), attributes.item(i).getTextContent());
@@ -232,11 +233,22 @@ public class XMLUtils {
 					if (isText(child)) {
 						if (isContainer(child)) {
 							Map childMap = toMap(child);
-							childMap.put("$value", child.getTextContent());
+							if (isNil(child)) {
+								// explicitly set it to null
+								childMap.put("$value", null);
+							}
+							else { 
+								childMap.put("$value", child.getTextContent());
+							}
 							((List<Object>) map.get(name)).add(childMap);
 						}
+						else if (isNil(child)) {
+							// explicitly set it to null
+							map.put(name, null);
+						}
 						else {
-							((List<Object>) map.get(name)).add(child.getTextContent());
+							String textContent = child.getTextContent();
+							((List<Object>) map.get(name)).add(textContent == null || textContent.isEmpty() ? null : textContent);
 						}
 					}
 					else {
@@ -247,11 +259,22 @@ public class XMLUtils {
 					if (isText(child)) {
 						if (isContainer(child)) {
 							Map childMap = toMap(child);
-							childMap.put("$value", child.getTextContent());
+							if (isNil(child)) {
+								// explicitly set it to null
+								childMap.put("$value", null);
+							}
+							else { 
+								childMap.put("$value", child.getTextContent());
+							}
 							map.put(name, childMap);
 						}
+						else if (isNil(child)) {
+							// explicitly set it to null
+							map.put(name, null);
+						}
 						else {
-							map.put(name, child.getTextContent());
+							String textContent = child.getTextContent();
+							map.put(name, textContent == null || textContent.isEmpty() ? null : textContent);
 						}
 					}
 					else {
@@ -262,9 +285,32 @@ public class XMLUtils {
 		}
 		return map;
 	}
-
+	
+	// some attributes should be ignored for parsing reasons, e.g.:
+	// xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"
+	private static boolean hasSignificantAttribute(Element element) {
+		boolean hasSignificantAttribute = false;
+		NamedNodeMap attributes = element.getAttributes();
+		for (int i = 0; i < attributes.getLength(); i++) {
+			if (((Attr) attributes.item(i)).getName().startsWith("xmlns:")) {
+				continue;
+			}
+			if (((Attr) attributes.item(i)).getName().startsWith("xsi:")) {
+				continue;
+			}
+			hasSignificantAttribute = true;
+			break;
+		}
+		return hasSignificantAttribute;
+	}
+	
+	private static boolean isNil(Element element) {
+		String attribute = element.getAttribute("xsi:nil");
+		return attribute != null && attribute.equalsIgnoreCase("true");
+	}
+	
 	private static boolean isContainer(Element element) {
-		return !isText(element) || element.getAttributes().getLength() > 0;
+		return !isText(element) || hasSignificantAttribute(element);
 	}
 	
 	private static boolean isText(Element element) {
