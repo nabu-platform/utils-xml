@@ -244,7 +244,7 @@ public class XMLUtils {
 						}
 						else if (isNil(child)) {
 							// explicitly set it to null
-							map.put(name, null);
+							((List<Object>) map.get(name)).add(null);
 						}
 						else {
 							String textContent = child.getTextContent();
