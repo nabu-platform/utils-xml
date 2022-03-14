@@ -7,7 +7,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -211,7 +211,7 @@ public class XMLUtils {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map<String, ?> toMap(Element element) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		NamedNodeMap attributes = element.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
 			// we handle xsi:nil in a dedicated fashion
