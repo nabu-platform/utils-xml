@@ -208,7 +208,7 @@ public class XMLUtils {
 		transformer.setURIResolver(new ClassPathURIResolver());
 		return transformer;
 	}
-	
+	// in a usecase we had a tag <configuration/> it was first correctly parsed as null, then an empty array was added so it became {configuration:{property:[]}}. we marshalled it _with_ pretty print which ended up in <configuration>\n</configuration> (see xml marshaller for details). second parse it failed because it was no longer an empty string....so we trim! this is very dynamic code anyway
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map<String, ?> toMap(Element element) {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
@@ -238,7 +238,8 @@ public class XMLUtils {
 								childMap.put("$value", null);
 							}
 							else { 
-								childMap.put("$value", child.getTextContent());
+								String textContent = child.getTextContent();
+								childMap.put("$value", textContent == null || textContent.trim().isEmpty() ? null : textContent);
 							}
 							((List<Object>) map.get(name)).add(childMap);
 						}
@@ -248,7 +249,7 @@ public class XMLUtils {
 						}
 						else {
 							String textContent = child.getTextContent();
-							((List<Object>) map.get(name)).add(textContent == null || textContent.isEmpty() ? null : textContent);
+							((List<Object>) map.get(name)).add(textContent == null || textContent.trim().isEmpty() ? null : textContent);
 						}
 					}
 					else {
@@ -264,7 +265,8 @@ public class XMLUtils {
 								childMap.put("$value", null);
 							}
 							else { 
-								childMap.put("$value", child.getTextContent());
+								String textContent = child.getTextContent();
+								childMap.put("$value", textContent == null || textContent.trim().isEmpty() ? null : textContent);
 							}
 							map.put(name, childMap);
 						}
@@ -274,7 +276,7 @@ public class XMLUtils {
 						}
 						else {
 							String textContent = child.getTextContent();
-							map.put(name, textContent == null || textContent.isEmpty() ? null : textContent);
+							map.put(name, textContent == null || textContent.trim().isEmpty() ? null : textContent);
 						}
 					}
 					else {
