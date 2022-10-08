@@ -62,6 +62,12 @@ public class XMLUtils {
 		String value = getAttribute(node, attribute);
 		return value == null ? null : new Integer(value);
 	}
+	
+	public static XPath query(Node node, String xpath) {
+		BaseNamespaceResolver resolver = new BaseNamespaceResolver();
+		resolver.setScanRecursively(true);
+		return new XPath(xpath).setNamespaceContext(resolver).query(node);
+	}
 		
 	public static Document toDocument(InputStream xml, boolean namespaceAware) throws SAXException, IOException, ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
