@@ -76,7 +76,12 @@ public class XMLUtils {
 		factory.setNamespaceAware(namespaceAware);
 		factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 		// allow no external access, as defined http://docs.oracle.com/javase/7/docs/api/javax/xml/XMLConstants.html#FEATURE_SECURE_PROCESSING an empty string means no protocols are allowed
-		factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		try {
+			factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		}
+		catch (Exception e) {
+			// not supported in later versions..............
+		}
 		return factory.newDocumentBuilder().parse(xml);
 	}
 	
